@@ -53,9 +53,9 @@ struct TopCountDiagram {
                 
                 var tops: [Top] = []
                 if let value = state.selectedSegment.value {
+                    let cutoffDate = Calendar.current.date(byAdding: .day, value: -value, to: Date()) ?? Date()
                     tops = filteredEntries
-                        .sorted(by: { $0.date > $1.date })
-                        .prefix(value)
+                        .filter { $0.date >= cutoffDate } // Filter entries within the date range
                         .reduce(into: [], { $0.append(contentsOf: $1.tops) })
                         .successful()
                 } else {
